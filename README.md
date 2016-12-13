@@ -14,5 +14,5 @@ python .\upload.py -c com24 -f sample.bin -t cm4
 ```
 Linux/macOS:
 ```
-pathon ./upload.py -c /dev/tty.usbmodem1412 -f sample.bin -t cm4
+python ./upload.py -c /dev/tty.usbmodem1412 -f sample.bin -t cm4
 ```
