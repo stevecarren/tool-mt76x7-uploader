@@ -5,20 +5,18 @@ import os, sys, time
 import logging
 import pyprind
 
-
+da_path = './da.bin'
 
 logging.basicConfig()
 parser = OptionParser(usage="python %prog [options]")
-parser.add_option("-f", dest="bin_path", help="path of bin to be upload")
 parser.add_option("-c", dest="com_port", help="COM port, can be COM1, COM2, ..., COMx")
-parser.add_option("--cm4", action="store_true", dest="cm4")
-parser.add_option("--n9", action="store_true", dest="n9")
-parser.add_option("--ldr", action="store_true", dest="ldr")
 parser.add_option("-d", action="store_true", dest="debug")
+parser.add_option("-f", dest="bin_path", help="path of the bin file to be uploaded")
+parser.add_option("-t", dest="target", help="target to be flashed (cm4 | ldr | n9).")
 (opt, args) = parser.parse_args()
 
-if not opt.n9 and not opt.cm4 and not opt.ldr:
-    print >> sys.stderr, "\nError: Invalid parameter!! Please specify which target to program.\n" 
+if opt.target != 'cm4' and opt.target != 'n9' and opt.target != 'ldr':
+    print >> sys.stderr, "\nError: Invalid parameter!! Please specify the target to be flashed.\n"
     parser.print_help()
     sys.exit(-1)
     pass
@@ -26,12 +24,12 @@ if not opt.n9 and not opt.cm4 and not opt.ldr:
 debug = opt.debug
 
 if not opt.bin_path or not opt.com_port:
-    print >> sys.stderr, "\nError: Invalid parameter!! Please specify COM port and bin.\n"
+    print >> sys.stderr, "\nError: Invalid parameter!! Please specify the COM port and the bin file.\n"
     parser.print_help()
     sys.exit(-1)
 
 if not os.path.exists(opt.bin_path):
-    print >> sys.stderr, "\nError: File [ %s ] not found !!!\n" % (opt.bin_path)
+    print >> sys.stderr, "\nError: Bin file [ %s ] not found !!!\n" % (opt.bin_path)
     parser.print_help()
     sys.exit(-1)
 
@@ -40,7 +38,7 @@ if not os.path.exists(opt.bin_path):
 s = serial.Serial()
 
 def resetIntoBootloader():
-    
+
     s.baudrate = 115200
     s.port = opt.com_port
     s.timeout = 1
@@ -63,7 +61,7 @@ def resetIntoBootloader():
     pass
 
 
-print >> sys.stderr, "Please push the Reset button"
+#print >> sys.stderr, "Please push the Reset button"
 
 
 error_count = 0
@@ -81,11 +79,11 @@ while 1:
     if c!=0 and c!="C":
         error_count = error_count +1
     if c_count>1:
-        print >> sys.stderr, "Reset button pushed, start uploading bootloader"
+        print >> sys.stderr, "Start uploading the download agent"
         break
         pass
     if error_count>3:
-        print "Error - Not Reading the start flag" 
+        print "Error - Not reading the start flag"
         retry  = retry +1
         error_count = 0
         c_count = 0
@@ -93,7 +91,7 @@ while 1:
         s.close()
         resetIntoBootloader()
     if time.time() - start_time > 3.0:
-        print "Error - Timeout" 
+        print "Error - Timeout"
         retry  = retry +1
         error_count = 0
         c_count = 0
@@ -107,7 +105,7 @@ while 1:
         pass
 
 
-statinfo = os.stat('./bootloader.bin')
+statinfo = os.stat(da_path)
 bar = pyprind.ProgBar(statinfo.st_size/128+1)
 
 def getc(size, timeout=1):
@@ -126,19 +124,19 @@ def pgupdate(read, total):
 
 m = xmodem.XMODEM(getc, putc)
 
-stream = open('./bootloader.bin', 'rb')
+stream = open(da_path, 'rb')
 m.send(stream)
-s.baudrate = 115200
+s.baudrate = 115200*2
 
-print >> sys.stderr, "Bootloader uploaded, start uploading user bin"
+print >> sys.stderr, "DA uploaded, start uploading the user bin"
 time.sleep(1)
-if opt.ldr:
+if opt.target == 'ldr':
     s.write("1\r")
     pass
-if opt.n9:
+if opt.target == 'n9':
     s.write("3\r")
     pass
-if opt.cm4:
+if opt.target == 'cm4':
     s.write("2\r")
     pass
 s.flush()
@@ -160,7 +158,7 @@ stream = open(opt.bin_path, 'rb')
 m = xmodem.XMODEM(getc, putc_user)
 m.send(stream)
 
-print >> sys.stderr, "Program uploaded, starting the program"
+print >> sys.stderr, "Bin file uploaded. The board reboots now."
 time.sleep(1)
 s.write("C\r")
 s.flush()
