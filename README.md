@@ -1,6 +1,8 @@
 #MT76x7 Uploader
 This tool provides the functionality to flash the bootloader and the firmware of the MT76x7 platform, which includes the firmware of both CM4 and the N9 processors.
 
+Official GitHub repository: https://github.com/MediaTek-Labs/mt76x7-uploader
+
 ##Usage
 ```
 -c COM_PORT      COM port, can be COM1, COM2, ..., COMx
