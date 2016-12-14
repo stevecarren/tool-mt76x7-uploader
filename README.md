@@ -12,7 +12,7 @@ Official GitHub repository: https://github.com/MediaTek-Labs/mt76x7-uploader
 ##Example
 Windows:
 ```
-python .\upload.py -c com24 -f sample.bin -t cm4
+upload.exe -c COM24 -f sample.bin -t cm4
 ```
 Linux/macOS:
 ```
