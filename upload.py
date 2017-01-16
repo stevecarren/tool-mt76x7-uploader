@@ -5,18 +5,26 @@ import os, sys, time
 import logging
 import pyprind
 
-da_path = './da.bin'
+da87_path = './da87.bin'
+da97_path = './da97.bin'
 
 logging.basicConfig()
 parser = OptionParser(usage="python %prog [options]")
 parser.add_option("-c", dest="com_port", help="COM port, can be COM1, COM2, ..., COMx")
 parser.add_option("-d", action="store_true", dest="debug")
 parser.add_option("-f", dest="bin_path", help="path of the bin file to be uploaded")
+parser.add_option("-p", dest="platform", help="patform to be flashed (mt7687 | mt7697)", default = 'mt7697')
 parser.add_option("-t", dest="target", help="target to be flashed (cm4 | ldr | n9).")
 (opt, args) = parser.parse_args()
 
 if opt.target != 'cm4' and opt.target != 'n9' and opt.target != 'ldr':
     print >> sys.stderr, "\nError: Invalid parameter!! Please specify the target to be flashed.\n"
+    parser.print_help()
+    sys.exit(-1)
+    pass
+
+if opt.platform != 'mt7687' and opt.platform != 'mt7697':
+    print >> sys.stderr, "\nError: Invalid platform is assigned. Only mt7687 and mt7697 are supported.\n"
     parser.print_help()
     sys.exit(-1)
     pass
@@ -104,6 +112,11 @@ while 1:
         exit()
         pass
 
+da_path = da97_path
+
+if opt.platform == 'mt7687':
+    da_path = da87_path
+    pass
 
 statinfo = os.stat(da_path)
 bar = pyprind.ProgBar(statinfo.st_size/128+1)
