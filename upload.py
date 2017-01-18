@@ -41,8 +41,6 @@ if not os.path.exists(opt.bin_path):
     parser.print_help()
     sys.exit(-1)
 
-#s = serial.Serial(opt.com_port, 115200)
-#s.rts = 0;
 s = serial.Serial()
 
 def resetIntoBootloader():
@@ -50,27 +48,26 @@ def resetIntoBootloader():
     s.baudrate = 115200
     s.port = opt.com_port
     s.timeout = 1
-    #s.rts = 0;
     s.open()
+
+
+    s.setRTS(True)
+    s.setDTR(False)
+    time.sleep(0.1)
+    
+    s.setDTR(True)
+    s.setRTS(False)
+    time.sleep(0.1)
 
     #init Com port to orginal state
     s.setRTS(False)
     s.setDTR(False)
-    time.sleep(0.05)
+    time.sleep(0.1)
+    s.flushInput()
 
-    #Discharge RTS
-    s.setRTS(True)
-    time.sleep(0.05)
-
-    #Pull down only DTR
-    s.setDTR(True)
-    #time.sleep(0.01)
-    s.setRTS(False)
     pass
 
-
 #print >> sys.stderr, "Please push the Reset button"
-
 
 error_count = 0
 c_count = 0
@@ -79,6 +76,8 @@ start_time = time.time()
 resetIntoBootloader()
 while 1:
     c = s.read()
+    s.flushInput()
+
     if debug:
         print >> sys.stderr, "Read: "+c.encode('hex')
         pass
@@ -97,6 +96,7 @@ while 1:
         c_count = 0
         start_time = time.time()
         s.close()
+        time.sleep(0.3)
         resetIntoBootloader()
     if time.time() - start_time > 3.0:
         print "Error - Timeout"
@@ -119,7 +119,7 @@ if opt.platform == 'mt7687':
     pass
 
 statinfo = os.stat(da_path)
-bar = pyprind.ProgBar(statinfo.st_size/128+1)
+bar = pyprind.ProgBar(statinfo.st_size/1024+2)
 
 def getc(size, timeout=1):
     return s.read(size)
@@ -135,7 +135,7 @@ def putc_user(data, timeout=1):
 def pgupdate(read, total):
     print "\r%d/%d bytes (%2.f%%) ..." % (read, total, read*100/total)
 
-m = xmodem.XMODEM(getc, putc)
+m = xmodem.XMODEM(getc, putc, mode='xmodem1k')
 
 stream = open(da_path, 'rb')
 m.send(stream)
@@ -166,9 +166,9 @@ s.flush()
 s.flushInput()
 
 statinfo_bin = os.stat(opt.bin_path)
-bar_user = pyprind.ProgBar(statinfo_bin.st_size/128+2)
+bar_user = pyprind.ProgBar(statinfo_bin.st_size/1024+2)
 stream = open(opt.bin_path, 'rb')
-m = xmodem.XMODEM(getc, putc_user)
+m = xmodem.XMODEM(getc, putc_user, mode='xmodem1k')
 m.send(stream)
 
 print >> sys.stderr, "Bin file uploaded. The board reboots now."
@@ -176,3 +176,17 @@ time.sleep(1)
 s.write("C\r")
 s.flush()
 s.flushInput()
+
+#Resetx
+s.setRTS(True)
+s.setDTR(False)
+time.sleep(0.1)
+
+#init Com port to orginal state
+s.setRTS(False)
+s.setDTR(False)
+time.sleep(0.1)
+
+
+s.close()
+
