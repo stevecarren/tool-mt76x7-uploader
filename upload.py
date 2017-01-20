@@ -54,7 +54,7 @@ def resetIntoBootloader():
     s.setRTS(True)
     s.setDTR(False)
     time.sleep(0.1)
-    
+
     s.setDTR(True)
     s.setRTS(False)
     time.sleep(0.1)
@@ -171,7 +171,7 @@ stream = open(opt.bin_path, 'rb')
 m = xmodem.XMODEM(getc, putc_user, mode='xmodem1k')
 m.send(stream)
 
-print >> sys.stderr, "Bin file uploaded. The board reboots now."
+print >> sys.stderr, "\nBin file uploaded. The board reboots now."
 time.sleep(1)
 s.write("C\r")
 s.flush()
