@@ -13,8 +13,8 @@ parser = OptionParser(usage="python %prog [options]")
 parser.add_option("-c", dest="com_port", help="COM port, can be COM1, COM2, ..., COMx")
 parser.add_option("-d", action="store_true", dest="debug")
 parser.add_option("-f", dest="bin_path", help="path of the bin file to be uploaded")
-parser.add_option("-p", dest="platform", help="patform to be flashed (mt7687 | mt7697)", default = 'mt7697')
-parser.add_option("-t", dest="target", help="target to be flashed (cm4 | ldr | n9).")
+parser.add_option("-p", dest="platform", help="patform to be flashed (mt7687 | mt7697)", default='mt7697')
+parser.add_option("-t", dest="target", help="target to be flashed (cm4 | ldr | n9).", default='cm4')
 (opt, args) = parser.parse_args()
 
 if opt.target != 'cm4' and opt.target != 'n9' and opt.target != 'ldr':
