@@ -13,6 +13,7 @@ parser = OptionParser(usage="python %prog [options]")
 parser.add_option("-c", dest="com_port", help="COM port, can be COM1, COM2, ..., COMx")
 parser.add_option("-d", action="store_true", dest="debug")
 parser.add_option("-f", dest="bin_path", help="path of the bin file to be uploaded")
+parser.add_option("-n", dest="da_file", help="path of the DA file to be used")
 parser.add_option("-p", dest="platform", help="patform to be flashed (mt7687 | mt7697)", default='mt7697')
 parser.add_option("-t", dest="target", help="target to be flashed (cm4 | ldr | n9).", default='cm4')
 (opt, args) = parser.parse_args()
@@ -31,6 +32,15 @@ if opt.platform != 'mt7687' and opt.platform != 'mt7697':
 
 debug = opt.debug
 
+da_path = opt.da_file
+
+if not opt.da_file:
+    if opt.platform == 'mt7697':
+        da_path = './da97.bin'
+    elif opt.platform == 'mt7687':
+        da_path = './da87.bin'
+    pass
+
 if not opt.bin_path or not opt.com_port:
     print >> sys.stderr, "\nError: Invalid parameter!! Please specify the COM port and the bin file.\n"
     parser.print_help()
@@ -38,7 +48,10 @@ if not opt.bin_path or not opt.com_port:
 
 if not os.path.exists(opt.bin_path):
     print >> sys.stderr, "\nError: Bin file [ %s ] not found !!!\n" % (opt.bin_path)
-    parser.print_help()
+    sys.exit(-1)
+
+if not os.path.exists(da_path):
+    print >> sys.stderr, "\nError: DA file [ %s ] not found !!!\n" % (da_path)
     sys.exit(-1)
 
 s = serial.Serial()
@@ -111,12 +124,6 @@ while 1:
         print "Exiting"
         exit()
         pass
-
-da_path = da97_path
-
-if opt.platform == 'mt7687':
-    da_path = da87_path
-    pass
 
 statinfo = os.stat(da_path)
 bar = pyprind.ProgBar(statinfo.st_size/1024+2)
