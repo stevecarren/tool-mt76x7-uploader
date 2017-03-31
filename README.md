@@ -60,7 +60,7 @@ On LinkIt 7697, to improve the usability, the GPIO37 state is controlled by the 
 
 ### Flasy Layout
 
-The default flash layout for LinkIt 7687 and LinkIt 7697 are the same, shown in the image below:
+The flash layout of LinkIt 7697 is shown in the image below - note the flash size and layout is different on LinkIt 7687.
 
 ![LinkIt 76x7 Flash Layout](doc/images/flash_layout.png)
 
