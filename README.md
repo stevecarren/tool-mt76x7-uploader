@@ -15,7 +15,7 @@ Official GitHub repository: https://github.com/MediaTek-Labs/mt76x7-uploader
 -f BIN_FILE      path of the bin file to be uploaded
 -n DA_FILE       path of the DA file to be used. The default file is da97.bin for mt7697 and da87.bin for mt7687
 -p PLATFORM_NAME platform to be flashed (mt7687 | mt7697). The default platform is mt7697
--t FLASH_TARGET  target to be flashed (cm4 | ldr | n9)
+-t FLASH_TARGET  target to be flashed (cm4 | ldr | n9). The default target is cm4
 ```
 
 ## Examples
@@ -78,7 +78,7 @@ There are 3 regions that can be uploaded:
 Initially state of RAM and Flash looks like this:
 ![upload flow step 1](doc/images/upload_flow_1.png)
 
-The Python script resets the board and put it into Flash Recovery mode. Under this mode the MT7697 chipset BootROM(BROM) accepts data from UART0 to write a small program to the RAM. We call this small program the **Download Agent**(DA) program. 
+The Python script resets the board and put it into Flash Recovery mode. Under this mode the MT7697 chipset BootROM(BROM) accepts data from UART0 to write a small program to the RAM. We call this small program the **Download Agent**(DA) program.
 
 ![upload flow step 2](doc/images/upload_flow_2.png)
 
