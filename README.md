@@ -66,13 +66,6 @@ The truth table of the control logic is:
 
 ![LinkIt 7697 Flash Mode Circuit](doc/images/linkit_7697_flash_mode_switch.png)
 
-As a result, if you use a terminal program to access the serial port of LinkIt 7697, be aware of the flow control settings in the terminal program. For example, the **Flow control** field in **PuTTY** (set it to *None*):
-
-![Putty Config](doc/images/serial_port_config.png)
-
-Or the DTR/RTS settings in the **Lines** tab of **eagleCom**:
-
-![eagleCom Config](doc/images/eagle_com_config.png)
 
 ### Flasy Layout
 
