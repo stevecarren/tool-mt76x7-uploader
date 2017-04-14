@@ -56,6 +56,7 @@ The straightforward approach is easy to understand, but this also implies that t
 On LinkIt 7697, to improve the usability, the GPIO37 state is controlled by the onboard **CP2102N** USB-to-UART chipset. The GPIO37 pin is connected to the flow contorl pins of CP2102N. This allows our Python script to reset the board and put the board in to Flash Recovery Mode without user intervention.
 
 The truth table of the control logic is:
+
 | DTR | RTS | GPIO37 | SYS_RST_N |
 |:---:|:---:|:------:|:---------:|
 |  0  |  0  |    0   |     1     |
