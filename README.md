@@ -30,6 +30,25 @@ upload.exe -c COM24 -f sample.bin -t cm4 -p mt7687
 python ./upload.py -c /dev/tty.usbmodem1412 -f sample.bin -t cm4 -p mt7687
 ```
 
+### Flash a build from LinkIt SDK
+If you build your project using LinkIt SDK 4.x, the output folder should look like this:
+
+```txt
+.
+├── flash_download.ini
+├── your_application.bin
+├── mt7697_bootloader.bin
+└── WIFI_RAM_CODE_MT76X7_in_flash.bin
+```
+
+You can flash the bootloader(`mt7697_bootloader.bin`), N9 firmmware(`WIFI_RAM_CODE_MT76X7_in_flash.bin`) and application binary by copying these files to the uploader tool folder and type the following command:
+
+```bash
+python upload.py -c /dev/tty.usbmodem1412 -n da97.bin -t ldr -f mt7697_bootloader.bin
+python upload.py -c /dev/tty.usbmodem1412 -n da97.bin -t n9 -f WIFI_RAM_CODE_MT76X7_in_flash.bin
+python upload.py -c /dev/tty.usbmodem1412 -n da97.bin -t cm4 -f your_application.bin
+```
+
 ## How It Works
 
 
