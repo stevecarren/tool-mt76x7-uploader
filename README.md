@@ -93,7 +93,7 @@ Or the DTR/RTS settings in the **Lines** tab of **eagleCom**:
 
 ![eagleCom Config](doc/images/eagle_com_config.png)
 
-### Flasy Layout
+### Flash Layout
 
 The flash layout of LinkIt 7697 is shown in the image below - note the flash size and layout is different on LinkIt 7687.
 
