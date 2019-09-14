@@ -1,4 +1,4 @@
-# MT76x7 Uploader
+# MT76x7 Uploader - Packaged for use with PlatformIO
 
 This tool provides the functionality to flash the bootloader and the firmware of the MT7687 and MT7697 platform, including firmwares for both CM4 and the N9 processors.
 
