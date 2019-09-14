@@ -1,0 +1,6 @@
+{
+    "description": "MT76x7 bootloader and firmware serial upload utility",
+    "name": "tool-mt76x7-uploader",
+    "url": "...",
+    "version": "0.0.1"
+}
